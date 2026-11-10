@@ -23,9 +23,10 @@
         .banner-item { width: 300px; }
         .banner-title { color: #53606e; font-size: 12px; line-height: 1.55; margin-bottom: 13px; min-height: 57px; }
         .banner-title strong { display: block; font-size: 12px; margin-bottom: 5px; color: #26313b; font-weight: 600; }
-        .banner-frame { position: relative; width: 300px; height: 500px; background: #fff; border: 1px solid #c8d2db; border-radius: 7px; overflow: hidden; cursor: default; box-shadow: 0 3px 15px rgba(30,45,60,.08); }
+        .banner-frame { position: relative; width: 300px; height: 500px; background: #fff; border: 1px solid #c8d2db; border-radius: 7px; overflow: hidden; cursor: pointer; box-shadow: 0 3px 15px rgba(30,45,60,.08); transform: scale(1); transform-origin: center center; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; z-index: 0; }
         .banner-frame iframe { display: block; border: 0; width: 300px; height: 500px; pointer-events: none; }
-        .banner-frame:hover { border-color: #9baeba; box-shadow: 0 5px 20px rgba(30,45,60,.12); }
+        .banner-frame:hover { border-color: #9baeba; box-shadow: 0 12px 28px rgba(30,45,60,.18); transform: scale(1.035); z-index: 2; }
+        @media (prefers-reduced-motion: reduce) { .banner-frame { transition: none; } }
         .empty-state { border: 1px dashed #d5dde5; background: #fafbfc; border-radius: 9px; color: #8a95a1; font-size: 12px; padding: 36px 25px; text-align: center; }
         .help { margin-top: 30px; color: #87929f; font-size: 11px; line-height: 1.7; }
         @media (max-width: 700px) { .page { padding: 30px 14px 60px; } .design { padding: 23px 12px 28px; } }
@@ -48,12 +49,19 @@
             {
                 title: 'Дизайн 01',
                 banners: [
-                    { number: 1, title: 'Вариант 01', text: 'Бесконечный цикл. Полный перезапуск сценария.' },
-                    { number: 2, title: 'Вариант 02', text: 'Появление элементов снизу вверх, один раз. Иллюзия движения шара вверх.' },
-                    { number: 3, title: 'Вариант 03', text: 'Динамичный старт со сдвигом влево, один раз. Иллюзия горизонтального движения шара.' }
+                    { number: 1, title: 'Вариант 01', text: 'Бесконечный цикл с перезапуском после паузы 3–4 секунды.' },
+                    { number: 2, title: 'Вариант 02', text: 'Бесконечный цикл с перезапуском после паузы 3–4 секунды.' },
+                    { number: 3, title: 'Вариант 03', text: 'Бесконечный цикл с перезапуском после паузы 3–4 секунды.' }
                 ]
             },
-            { title: 'Дизайн 02', banners: [] },
+            {
+                title: 'Дизайн 02',
+                banners: [
+                    { number: 4, title: 'Вариант 01', text: 'Однократное воспроизведение анимации с остановкой на финальном кадре.' },
+                    { number: 5, title: 'Вариант 02', text: 'Однократное воспроизведение с альтернативным эффектом анимации и остановкой на финальном кадре.' },
+                    { number: 6, title: 'Вариант 03', text: 'Бесконечный цикл с автоматическим перезапуском анимации.' }
+                ]
+            },
             { title: 'Дизайн 03', banners: [] }
         ];
 
