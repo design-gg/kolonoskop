@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Майоли — презентация анимационных концепций</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --page-bg: #f3f5f7;
+            --surface: #ffffff;
+            --text: #222c37;
+            --muted: #72808e;
+            --line: #e2e7ec;
+            --accent: #2666ac;
+            --preview: #e9eff4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: "Montserrat", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 44px 24px 72px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(24px, 3vw, 34px);
+            font-weight: 600;
+            letter-spacing: -0.035em;
+        }
+
+        .page-subtitle {
+            margin: 0;
+            max-width: 630px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .format {
+            padding-top: 7px;
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .design-section {
+            margin-bottom: 22px;
+            padding: 27px 26px 30px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: var(--surface);
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            margin: 0 0 6px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #4e6c5c;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #61a37a;
+        }
+
+        .status.pending {
+            color: #87919b;
+        }
+
+        .status.pending::before {
+            background: #b9c2cb;
+        }
+
+        .banners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, 300px);
+            justify-content: center;
+            align-items: start;
+            gap: 28px 24px;
+        }
+
+        .banner-item {
+            width: 300px;
+            min-width: 0;
+        }
+
+        .banner-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 0 10px;
+            min-height: 19px;
+        }
+
+        .banner-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .banner-viewport {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            overflow: hidden;
+            border: 1px solid #b8c1c5;
+            border-radius: 8px;
+            background: var(--preview);
+            box-shadow: 0 3px 12px rgba(19, 35, 50, 0.06);
+            cursor: pointer;
+        }
+
+        .banner-viewport:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .banner-viewport iframe {
+            position: absolute;
+            inset: 0;
+            display: block;
+            width: 300px;
+            height: 500px;
+            border: 0;
+            pointer-events: none;
+        }
+
+        .banner-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 13px;
+            padding: 28px;
+            background: linear-gradient(150deg, #eaf0f5, #f6f8fa);
+            color: #627586;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.6;
+            pointer-events: none;
+        }
+
+        .play-symbol {
+            display: grid;
+            width: 55px;
+            height: 55px;
+            place-items: center;
+            border: 1px solid #c8d6e0;
+            border-radius: 50%;
+            background: white;
+            color: #426b8c;
+            font-size: 24px;
+        }
+
+        .banner-placeholder.hidden {
+            display: none;
+        }
+
+        .banner-description {
+            min-height: 58px;
+            margin: 14px 0 12px;
+            color: #606d79;
+            font-size: 11px;
+            line-height: 1.65;
+        }
+
+        .replay-button {
+            padding: 8px 12px;
+            border: 1px solid var(--line);
+            border-radius: 7px;
+            background: white;
+            color: #3b556a;
+            font: 500 11px "Montserrat", Arial, sans-serif;
+            cursor: pointer;
+        }
+
+        .replay-button:hover {
+            border-color: #a5bace;
+            background: #f7fafc;
+        }
+
+        .replay-button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .hint {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-top: 23px;
+            padding: 13px 15px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #657789;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .coming-soon {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-height: 85px;
+            color: #9ba6b1;
+            font-size: 12px;
+        }
+
+        .coming-soon-icon {
+            display: grid;
+            width: 58px;
+            height: 58px;
+            place-items: center;
+            border: 1px dashed #d4dde5;
+            border-radius: 9px;
+            background: #f6f8fa;
+            font-size: 20px;
+        }
+
+        @media (max-width: 680px) {
+            .page {
+                padding: 25px 12px 45px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .design-section {
+                padding: 22px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Майоли</p>
+                <h1>Анимационные концепции</h1>
+                <p class="page-subtitle">Три дизайна с разными вариантами анимации. Наведите курсор на баннер, чтобы запустить сценарий, или нажмите «Повторить».</p>
+            </div>
+            <div class="format">HTML5 · 300 × 500</div>
+        </header>
+
+        <div id="designSections"></div>
+    </main>
+
+    <script>
+        // Здесь собраны все дизайны и их анимационные варианты.
+        // Для второго и третьего дизайнов позже добавьте объекты в массив banners.
+        const designsConfig = [
+            {
+                title: 'Дизайн 01',
+                subtitle: 'Три варианта движения одного визуала',
+                banners: [
+                    {
+                        name: 'Вариант 01',
+                        folder: 'banners/banner-1/',
+                        htmlFile: 'index.html',
+                        width: 300,
+                        height: 500,
+                        text: 'Анимация проигрывается бесконечно. Полный перезапуск сценария.'
+                    },
+                    {
+                        name: 'Вариант 02',
+                        folder: 'banners/banner-2/',
+                        htmlFile: 'index.html',
+                        width: 300,
+                        height: 500,
+                        text: 'Однократное появление элементов снизу вверх. Иллюзия движения шара вверх.'
+                    },
+                    {
+                        name: 'Вариант 03',
+                        folder: 'banners/banner-3/',
+                        htmlFile: 'index.html',
+                        width: 300,
+                        height: 500,
+                        text: 'Более динамичный старт со сдвигом влево. Иллюзия горизонтального движения шара.'
+                    }
+                ]
+            },
+            {
+                title: 'Дизайн 02',
+                subtitle: 'Варианты анимации будут добавлены позже',
+                banners: []
+            },
+            {
+                title: 'Дизайн 03',
+                subtitle: 'Варианты анимации будут добавлены позже',
+                banners: []
+            }
+        ];
+
+        const sectionsContainer = document.getElementById('designSections');
+
+        function playBanner(iframe, placeholder, banner) {
+            const source = banner.folder + banner.htmlFile;
+
+            // Перезагрузка iframe запускает исходный HTML5-баннер с начала.
+            // Никаких изменений в GSAP-коде самих баннеров не требуется.
+            iframe.src = source;
+            placeholder.classList.add('hidden');
+        }
+
+        function createBanner(banner) {
+            const item = document.createElement('article');
+            item.className = 'banner-item';
+
+            const topline = document.createElement('div');
+            topline.className = 'banner-topline';
+
+            const label = document.createElement('span');
+            label.className = 'banner-label';
+            label.textContent = banner.name;
+            topline.appendChild(label);
+
+            const viewport = document.createElement('div');
+            viewport.className = 'banner-viewport';
+            viewport.tabIndex = 0;
+            viewport.setAttribute('role', 'button');
+            viewport.setAttribute('aria-label', `Запустить анимацию: ${banner.name}`);
+
+            const iframe = document.createElement('iframe');
+            iframe.title = banner.name;
+            iframe.width = banner.width;
+            iframe.height = banner.height;
+            iframe.scrolling = 'no';
+            iframe.setAttribute('aria-hidden', 'true');
+            // src намеренно не задается: до наведения анимация не запускается.
+
+            const placeholder = document.createElement('div');
+            placeholder.className = 'banner-placeholder';
+            placeholder.innerHTML = '<span class="play-symbol" aria-hidden="true">▶</span><span>Наведите курсор, чтобы<br>посмотреть анимацию</span>';
+
+            viewport.appendChild(iframe);
+            viewport.appendChild(placeholder);
+
+            viewport.addEventListener('mouseenter', function() {
+                playBanner(iframe, placeholder, banner);
+            });
+
+            viewport.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    playBanner(iframe, placeholder, banner);
+                }
+            });
+
+            // Не останавливаем анимацию при уходе курсора:
+            // сценарий доигрывает сам, как предусмотрено в исходном баннере.
+
+            const description = document.createElement('p');
+            description.className = 'banner-description';
+            description.textContent = banner.text;
+
+            const replayButton = document.createElement('button');
+            replayButton.type = 'button';
+            replayButton.className = 'replay-button';
+            replayButton.textContent = '↻ Повторить анимацию';
+            replayButton.addEventListener('click', function() {
+                playBanner(iframe, placeholder, banner);
+            });
+
+            item.appendChild(topline);
+            item.appendChild(viewport);
+            item.appendChild(description);
+            item.appendChild(replayButton);
+
+            return item;
+        }
+
+        function renderDesigns() {
+            sectionsContainer.innerHTML = '';
+
+            designsConfig.forEach(function(design) {
+                const section = document.createElement('section');
+                section.className = 'design-section';
+
+                const heading = document.createElement('div');
+                heading.className = 'section-heading';
+
+                const headingText = document.createElement('div');
+                const title = document.createElement('h2');
+                title.className = 'section-title';
+                title.textContent = design.title;
+
+                const subtitle = document.createElement('p');
+                subtitle.className = 'section-subtitle';
+                subtitle.textContent = design.subtitle;
+
+                headingText.appendChild(title);
+                headingText.appendChild(subtitle);
+                heading.appendChild(headingText);
+
+                const status = document.createElement('span');
+                status.className = design.banners.length ? 'status' : 'status pending';
+                status.textContent = design.banners.length
+                    ? `${design.banners.length} ${design.banners.length === 1 ? 'вариант' : 'варианта'}`
+                    : 'В разработке';
+                heading.appendChild(status);
+                section.appendChild(heading);
+
+                if (design.banners.length) {
+                    const grid = document.createElement('div');
+                    grid.className = 'banners-grid';
+
+                    design.banners.forEach(function(banner) {
+                        grid.appendChild(createBanner(banner));
+                    });
+
+                    section.appendChild(grid);
+
+                    const hint = document.createElement('div');
+                    hint.className = 'hint';
+                    hint.textContent = '↗ Наведите курсор на баннер для запуска. Для повторного просмотра используйте кнопку под ним.';
+                    section.appendChild(hint);
+                } else {
+                    const comingSoon = document.createElement('div');
+                    comingSoon.className = 'coming-soon';
+                    comingSoon.innerHTML = '<div class="coming-soon-icon" aria-hidden="true">▧</div><span>Здесь появятся анимационные варианты этого дизайна.</span>';
+                    section.appendChild(comingSoon);
+                }
+
+                sectionsContainer.appendChild(section);
+            });
+        }
+
+        renderDesigns();
+    </script>
+</body>
+</html>
