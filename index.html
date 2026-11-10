@@ -81,86 +81,119 @@
             iframe.src = `banners/banner-${banner.number}/index.html`;
 
             let isHovered = false;
-            let isLoaded = false;
+            let isReady = false;
             let timeline = null;
+            let initAttempts = 0;
+            let loadGeneration = 0;
 
-            function findGsap() {
+            function getChild() {
                 try {
-                    const child = iframe.contentWindow;
-                    if (child && child.gsap && child.gsap.globalTimeline) {
-                        timeline = child.gsap.globalTimeline;
-                        return timeline;
-                    }
+                    return iframe.contentWindow;
                 } catch (error) {
-                    console.warn('Не удалось получить GSAP баннера:', iframe.src, error);
+                    return null;
                 }
-                return null;
+            }
+
+            function findBannerTimeline(child) {
+                // GSAP автоматически удаляет завершенные однократные таймлайны
+                // из globalTimeline. Поэтому сохраняем ссылку на личный таймлайн
+                // баннера ДО того, как анимация успеет завершиться.
+                const shok = child.exportRoot && child.exportRoot.shok;
+                if (!shok) return null;
+
+                const animations = child.gsap.globalTimeline.getChildren(true, true, true);
+                const tween = animations.find(animation =>
+                    typeof animation.targets === 'function' && animation.targets().includes(shok)
+                );
+                if (!tween) return null;
+
+                let parent = tween.parent;
+                while (parent && parent.parent && parent.parent !== child.gsap.globalTimeline) {
+                    parent = parent.parent;
+                }
+                return parent && parent !== child.gsap.globalTimeline ? parent : null;
             }
 
             function hideAnimateBorder() {
-                // Скрываем нарисованную внутри Adobe Animate рамку, если она есть.
-                // В этих баннерах она добавляется последним Shape в root.
-                try {
-                    const child = iframe.contentWindow;
-                    const root = child && child.exportRoot;
-                    if (!root || !child.createjs) return;
-                    const last = root.children[root.children.length - 1];
-                    if (last instanceof child.createjs.Shape && last.mouseEnabled === false) {
-                        last.visible = false;
-                    }
-                    if (child.stage) child.stage.update();
-                } catch (error) {
-                    console.warn('Не удалось скрыть внутреннюю рамку banner-' + banner.number, error);
+                // Внешнюю рамку не рисуем. Скрываем Shape-рамку Animate,
+                // чтобы прямые углы баннера не конфликтовали с оформлением.
+                const child = getChild();
+                const root = child && child.exportRoot;
+                if (!root || !child.createjs) return;
+                const last = root.children[root.children.length - 1];
+                if (last instanceof child.createjs.Shape && last.mouseEnabled === false) {
+                    last.visible = false;
                 }
             }
 
             function resetSpecialElements() {
-                // Для второго дизайна 0 GSAP-таймлайна не всегда совпадает
-                // с исходным состоянием символа. Восстанавливаем его вручную.
                 if (banner.number < 4 || banner.number > 6) return;
-                try {
-                    const child = iframe.contentWindow;
-                    const shok = child && child.exportRoot && child.exportRoot.shok;
-                    if (!shok) return;
-                    shok.alpha = 0;
-                    shok.scaleX = banner.number === 4 ? 2.5 : 4.5;
-                    shok.scaleY = banner.number === 4 ? 2.5 : 4.5;
-                    shok.x = 149.95;
-                    shok.rotation = 0;
-                    if (child.stage) child.stage.update();
-                } catch (error) {
-                    console.warn('Не удалось сбросить banner-' + banner.number, error);
-                }
+                const child = getChild();
+                const shok = child && child.exportRoot && child.exportRoot.shok;
+                if (!shok) return;
+                shok.alpha = 0;
+                shok.scaleX = banner.number === 4 ? 2.5 : 4.5;
+                shok.scaleY = banner.number === 4 ? 2.5 : 4.5;
+                shok.x = 149.95;
+                shok.rotation = 0;
+            }
+
+            function updateStage() {
+                const child = getChild();
+                if (child && child.stage) child.stage.update();
             }
 
             function reset() {
                 isHovered = false;
-                if (timeline || findGsap()) {
-                    timeline.pause(0);
-                    hideAnimateBorder();
-                    resetSpecialElements();
-                }
+                if (!isReady || !timeline) return;
+                timeline.pause(0);
+                resetSpecialElements();
+                hideAnimateBorder();
+                updateStage();
             }
 
             function play() {
                 isHovered = true;
-                if (!isLoaded) return;
-                if (timeline || findGsap()) {
-                    // При повторном наведении воспроизводим сценарий с начала.
-                    timeline.restart();
+                if (!isReady || !timeline) return;
+                // restart() вызывается у конкретного таймлайна, даже если
+                // предыдущая однократная анимация уже полностью закончилась.
+                timeline.restart();
+            }
+
+            function initialize(generation) {
+                if (generation !== loadGeneration) return;
+                const child = getChild();
+                if (!child || !child.gsap || !child.exportRoot || !child.stage) {
+                    if (initAttempts++ < 300) requestAnimationFrame(() => initialize(generation));
+                    return;
                 }
+
+                if (banner.number >= 4 && banner.number <= 6) {
+                    timeline = findBannerTimeline(child);
+                } else {
+                    timeline = child.gsap.globalTimeline;
+                }
+
+                if (!timeline) {
+                    if (initAttempts++ < 300) requestAnimationFrame(() => initialize(generation));
+                    else console.warn('Не найден таймлайн banner-' + banner.number);
+                    return;
+                }
+
+                isReady = true;
+                timeline.pause(0);
+                resetSpecialElements();
+                hideAnimateBorder();
+                updateStage();
+                if (isHovered) play();
             }
 
             iframe.addEventListener('load', function () {
-                isLoaded = true;
-                if (findGsap()) {
-                    timeline.pause(0);
-                    hideAnimateBorder();
-                    resetSpecialElements();
-                    if (isHovered) play();
-                } else {
-                    console.warn('GSAP не найден:', iframe.src);
-                }
+                isReady = false;
+                timeline = null;
+                initAttempts = 0;
+                loadGeneration += 1;
+                initialize(loadGeneration);
             });
 
             frame.addEventListener('mouseenter', play);
