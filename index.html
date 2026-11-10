@@ -14,18 +14,18 @@
         header { margin-bottom: 36px; }
         .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #758394; font-weight: 600; }
         h1 { font-size: clamp(23px, 3.2vw, 34px); letter-spacing: -.035em; margin: 9px 0 11px; font-weight: 600; }
-        .intro { font-size: 13px; line-height: 1.6; color: #687584; max-width: 680px; }
+        .intro { font-size: 13px; line-height: 1.6; color: #687584; max-width: 700px; }
         .design { margin-top: 34px; padding: 28px 24px 32px; background: #fff; border: 1px solid #e9edf1; border-radius: 15px; }
         .design-heading { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 26px; }
         h2 { margin: 0; font-size: 17px; font-weight: 600; }
         .counter { color: #7d8996; font-size: 11px; white-space: nowrap; }
-        .banners-grid { display: grid; grid-template-columns: repeat(auto-fit, 300px); justify-content: center; gap: 26px 22px; align-items: start; }
-        .banner-item { width: 300px; }
-        .banner-title { color: #53606e; font-size: 12px; line-height: 1.55; margin-bottom: 13px; min-height: 57px; }
-        .banner-title strong { display: block; font-size: 12px; margin-bottom: 5px; color: #26313b; font-weight: 600; }
-        .banner-frame { position: relative; width: 300px; height: 500px; background: #fff; border: 1px solid #c8d2db; border-radius: 7px; overflow: hidden; cursor: pointer; box-shadow: 0 3px 15px rgba(30,45,60,.08); transform: scale(1); transform-origin: center center; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; z-index: 0; }
+        .banners-grid { display: grid; grid-template-columns: repeat(auto-fit, 300px); justify-content: center; gap: 30px 22px; align-items: start; }
+        .banner-item { width: 300px; min-width: 0; }
+        .banner-frame { position: relative; width: 300px; height: 500px; background: #fff; border: 0; border-radius: 0; overflow: hidden; cursor: pointer; box-shadow: 0 3px 15px rgba(30,45,60,.08); transform: scale(1); transform-origin: center; transition: transform .22s ease, box-shadow .22s ease; z-index: 0; }
         .banner-frame iframe { display: block; border: 0; width: 300px; height: 500px; pointer-events: none; }
-        .banner-frame:hover { border-color: #9baeba; box-shadow: 0 12px 28px rgba(30,45,60,.18); transform: scale(1.035); z-index: 2; }
+        .banner-frame:hover { box-shadow: 0 12px 28px rgba(30,45,60,.18); transform: scale(1.035); z-index: 2; }
+        .banner-title { color: #53606e; font-size: 12px; line-height: 1.6; margin-top: 17px; }
+        .banner-title strong { display: block; font-size: 12px; margin-bottom: 5px; color: #26313b; font-weight: 600; }
         @media (prefers-reduced-motion: reduce) { .banner-frame { transition: none; } }
         .empty-state { border: 1px dashed #d5dde5; background: #fafbfc; border-radius: 9px; color: #8a95a1; font-size: 12px; padding: 36px 25px; text-align: center; }
         .help { margin-top: 30px; color: #87929f; font-size: 11px; line-height: 1.7; }
@@ -37,14 +37,13 @@
         <header>
             <div class="eyebrow">Mayoly / HTML5</div>
             <h1>Варианты анимации</h1>
-            <p class="intro">Все баннеры показаны в исходном состоянии. Наведите курсор на любой баннер, чтобы запустить анимацию. Уберите курсор, чтобы остановить ее и вернуться к первому кадру.</p>
+            <p class="intro">Все баннеры показаны в исходном состоянии. Наведите курсор на баннер, чтобы запустить анимацию. Уберите курсор, чтобы остановить ее и вернуться к первому кадру.</p>
         </header>
         <div id="designs"></div>
-        <p class="help">Для корректной работы на GitHub Pages страница и папка banners должны находиться в одном репозитории. Этот способ рассчитан на баннеры, чье движение управляется GSAP.</p>
+        <p class="help">Все баннеры загружаются из общей папки banners. Для добавления следующих вариантов достаточно указать их номера в конфигурации страницы.</p>
     </main>
     <script>
-        // Все файлы берутся из одной папки: banners/banner-1/, banners/banner-2/ и т.д.
-        // Для новых дизайнов добавляй номера баннеров в соответствующий массив.
+        // Все баннеры лежат рядом: banners/banner-1/, banners/banner-2/ и далее.
         const designs = [
             {
                 title: 'Дизайн 01',
@@ -57,9 +56,9 @@
             {
                 title: 'Дизайн 02',
                 banners: [
-                    { number: 4, title: 'Вариант 01', text: 'Однократное воспроизведение анимации с остановкой на финальном кадре.' },
-                    { number: 5, title: 'Вариант 02', text: 'Однократное воспроизведение с альтернативным эффектом анимации и остановкой на финальном кадре.' },
-                    { number: 6, title: 'Вариант 03', text: 'Бесконечный цикл с автоматическим перезапуском анимации.' }
+                    { number: 4, title: 'Вариант 01', text: 'Однократная анимация с остановкой на финальном кадре.' },
+                    { number: 5, title: 'Вариант 02', text: 'Однократная анимация с альтернативным эффектом и остановкой на финальном кадре.' },
+                    { number: 6, title: 'Вариант 03', text: 'Бесконечный цикл с автоматическим перезапуском.' }
                 ]
             },
             { title: 'Дизайн 03', banners: [] }
@@ -68,17 +67,11 @@
         function createBanner(banner) {
             const item = document.createElement('article');
             item.className = 'banner-item';
-            const label = document.createElement('div');
-            label.className = 'banner-title';
-            const strong = document.createElement('strong');
-            strong.textContent = banner.title;
-            const description = document.createElement('span');
-            description.textContent = banner.text || '';
-            label.append(strong, description);
 
             const frame = document.createElement('div');
             frame.className = 'banner-frame';
             frame.setAttribute('aria-label', `${banner.title}: наведите курсор для воспроизведения`);
+
             const iframe = document.createElement('iframe');
             iframe.title = `${banner.title}, баннер ${banner.number}`;
             iframe.width = '300';
@@ -104,11 +97,48 @@
                 return null;
             }
 
+            function hideAnimateBorder() {
+                // Скрываем нарисованную внутри Adobe Animate рамку, если она есть.
+                // В этих баннерах она добавляется последним Shape в root.
+                try {
+                    const child = iframe.contentWindow;
+                    const root = child && child.exportRoot;
+                    if (!root || !child.createjs) return;
+                    const last = root.children[root.children.length - 1];
+                    if (last instanceof child.createjs.Shape && last.mouseEnabled === false) {
+                        last.visible = false;
+                    }
+                    if (child.stage) child.stage.update();
+                } catch (error) {
+                    console.warn('Не удалось скрыть внутреннюю рамку banner-' + banner.number, error);
+                }
+            }
+
+            function resetSpecialElements() {
+                // Для второго дизайна 0 GSAP-таймлайна не всегда совпадает
+                // с исходным состоянием символа. Восстанавливаем его вручную.
+                if (banner.number < 4 || banner.number > 6) return;
+                try {
+                    const child = iframe.contentWindow;
+                    const shok = child && child.exportRoot && child.exportRoot.shok;
+                    if (!shok) return;
+                    shok.alpha = 0;
+                    shok.scaleX = banner.number === 4 ? 2.5 : 4.5;
+                    shok.scaleY = banner.number === 4 ? 2.5 : 4.5;
+                    shok.x = 149.95;
+                    shok.rotation = 0;
+                    if (child.stage) child.stage.update();
+                } catch (error) {
+                    console.warn('Не удалось сбросить banner-' + banner.number, error);
+                }
+            }
+
             function reset() {
                 isHovered = false;
                 if (timeline || findGsap()) {
-                    // Полностью останавливает GSAP и возвращает все анимации к началу.
                     timeline.pause(0);
+                    hideAnimateBorder();
+                    resetSpecialElements();
                 }
             }
 
@@ -116,7 +146,7 @@
                 isHovered = true;
                 if (!isLoaded) return;
                 if (timeline || findGsap()) {
-                    // Каждое наведение воспроизводит сценарий с нуля.
+                    // При повторном наведении воспроизводим сценарий с начала.
                     timeline.restart();
                 }
             }
@@ -125,7 +155,9 @@
                 isLoaded = true;
                 if (findGsap()) {
                     timeline.pause(0);
-                    if (isHovered) timeline.restart();
+                    hideAnimateBorder();
+                    resetSpecialElements();
+                    if (isHovered) play();
                 } else {
                     console.warn('GSAP не найден:', iframe.src);
                 }
@@ -134,7 +166,17 @@
             frame.addEventListener('mouseenter', play);
             frame.addEventListener('mouseleave', reset);
             frame.appendChild(iframe);
-            item.append(label, frame);
+
+            const label = document.createElement('div');
+            label.className = 'banner-title';
+            const strong = document.createElement('strong');
+            strong.textContent = banner.title;
+            const description = document.createElement('span');
+            description.textContent = banner.text || '';
+            label.append(strong, description);
+
+            // Текст под баннером: верхний край всех iframe теперь на одной линии.
+            item.append(frame, label);
             return item;
         }
 
@@ -149,7 +191,7 @@
                 title.textContent = design.title;
                 const counter = document.createElement('span');
                 counter.className = 'counter';
-                counter.textContent = design.banners.length ? `${design.banners.length} вариант(а)` : 'Скоро';
+                counter.textContent = design.banners.length ? `${design.banners.length} варианта` : 'Скоро';
                 heading.append(title, counter);
                 section.appendChild(heading);
                 if (design.banners.length) {
