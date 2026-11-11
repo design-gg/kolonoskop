@@ -18,6 +18,51 @@
         .design { margin-top: 34px; padding: 28px 24px 32px; background: #fff; border: 1px solid #e9edf1; border-radius: 15px; }
         .design-heading { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 26px; }
         h2 { margin: 0; font-size: 17px; font-weight: 600; }
+        
+.demo-notice {
+    margin-top: 24px;
+    padding: 22px 26px;
+    background: #EAF3FC;
+    border: 1px solid #C8DDF2;
+    border-radius: 12px;
+}
+
+.demo-notice-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #183C64;
+}
+
+.demo-cursor {
+    font-size: 30px;
+    flex-shrink: 0;
+}
+
+.demo-notice p {
+    margin: 12px 0 0 44px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #536E8C;
+}
+
+@media (max-width: 600px) {
+    .demo-notice {
+        padding: 18px;
+    }
+
+    .demo-notice-title {
+        font-size: 16px;
+    }
+
+    .demo-notice p {
+        margin-left: 0;
+    }
+}
+
         .counter { color: #7d8996; font-size: 11px; white-space: nowrap; }
         .banners-grid { display: grid; grid-template-columns: repeat(auto-fit, 300px); justify-content: center; gap: 30px 22px; align-items: start; }
         .banner-item { width: 300px; min-width: 0; }
@@ -37,7 +82,17 @@
         <header>
             <div class="eyebrow">Mayoly / HTML5</div>
             <h1>Варианты анимации</h1>
-            <p class="intro">Все баннеры показаны в исходном состоянии. Наведите курсор на баннер, чтобы запустить анимацию. Уберите курсор, чтобы остановить ее и вернуться к первому кадру.</p>
+            <div class="demo-notice">
+    <div class="demo-notice-title">
+        <span class="demo-cursor">☝</span>
+        Наведите курсор на баннер, чтобы увидеть анимацию
+    </div>
+    <p>
+        Для удобства сравнения анимации запускаются по наведению,
+        чтобы все баннеры не двигались одновременно.
+        При реальном размещении они воспроизводятся автоматически.
+    </p>
+</div>
         </header>
         <div id="designs"></div>
         <p class="help">Все баннеры загружаются из общей папки banners. Для добавления следующих вариантов достаточно указать их номера в конфигурации страницы.</p>
