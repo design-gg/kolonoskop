@@ -158,12 +158,13 @@
                 // GSAP автоматически удаляет завершенные однократные таймлайны
                 // из globalTimeline. Поэтому сохраняем ссылку на личный таймлайн
                 // баннера ДО того, как анимация успеет завершиться.
-                const shok = child.exportRoot && child.exportRoot.shok;
-                if (!shok) return null;
+                const root = child.exportRoot;
+                const target = banner.number >= 7 ? root.t1 : root.shok;
+                if (!target) return null;
 
                 const animations = child.gsap.globalTimeline.getChildren(true, true, true);
                 const tween = animations.find(animation =>
-                    typeof animation.targets === 'function' && animation.targets().includes(shok)
+                    typeof animation.targets === 'function' && animation.targets().includes(target)
                 );
                 if (!tween) return null;
 
@@ -203,13 +204,26 @@
                 if (child && child.stage) child.stage.update();
             }
 
-            function reset() {
-                isHovered = false;
+            function showIdleFrame() {
                 if (!isReady || !timeline) return;
-                timeline.pause(0);
-                resetSpecialElements();
+
+                if (banner.number === 7 || banner.number === 8) {
+                    // В третьем дизайне статичным состоянием служит финальный кадр.
+                    timeline.pause();
+                    timeline.progress(1);
+                    timeline.pause();
+                } else {
+                    timeline.pause(0);
+                    resetSpecialElements();
+                }
+
                 hideAnimateBorder();
                 updateStage();
+            }
+
+            function reset() {
+                isHovered = false;
+                showIdleFrame();
             }
 
             function play() {
@@ -228,7 +242,7 @@
                     return;
                 }
 
-                if (banner.number >= 4 && banner.number <= 6) {
+                if (banner.number >= 4) {
                     timeline = findBannerTimeline(child);
                 } else {
                     timeline = child.gsap.globalTimeline;
@@ -241,10 +255,7 @@
                 }
 
                 isReady = true;
-                timeline.pause(0);
-                resetSpecialElements();
-                hideAnimateBorder();
-                updateStage();
+                showIdleFrame();
                 if (isHovered) play();
             }
 
